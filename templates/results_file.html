@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Timeline - {{ file.filename }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}">
+</head>
+<body>
+    <div class="container file-timeline-container">
+        <header class="results-header">
+            <a href="javascript:history.back()" class="btn-back">&larr; Back to Results</a>
+        </header>
+        
+        <div class="file-info-header">
+            <h1>{{ file.filename }}</h1>
+            <span class="file-type-badge">{{ file.file_type | upper }}</span>
+        </div>
+
+        <section class="timeline-section">
+            <h2>Activity Timeline</h2>
+            <div class="timeline">
+                <div class="timeline-event created">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>File Created</h3>
+                        <p>{{ file.created_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                    </div>
+                </div>
+                <div class="timeline-event modified">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Last Modified</h3>
+                        <p>{{ file.modified_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                    </div>
+                </div>
+                <div class="timeline-event accessed">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Last Accessed</h3>
+                        <p>{{ file.accessed_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="metadata-details">
+            <h2>Full Metadata</h2>
+            <div class="metadata-grid">
+                <div class="metadata-item">
+                    <strong>Size:</strong> {{ file.size_kb }} KB
+                </div>
+                 </div>
+            {% if file.exif_data %}
+            <h3>EXIF Data</h3>
+            <pre class="exif-data">{{ file.exif_data | tojson(indent=2) | safe }}</pre>
+            {% endif %}
+        </section>
+
+    </div>
+</body>
+</html>

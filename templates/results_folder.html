@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results - Metadata Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container results-container">
+        <header class="results-header">
+            <a href="{{ url_for('upload_page') }}" class="btn-back">&larr; New Analysis</a>
+            <h1>Folder Analysis Report</h1>
+        </header>
+
+        <section class="summary-section">
+            <div class="summary-stats">
+                <h2>Summary</h2>
+                <ul>
+                    <li><strong>Total Files Found:</strong> {{ total_files }}</li>
+                    {% for label, count in summary_list %}
+                    <li><strong>{{ label|upper }} Files:</strong> {{ count }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="summary-chart">
+                <canvas id="fileTypeChart"></canvas>
+            </div>
+        </section>
+
+        <section class="table-section">
+            <div class="filter-carousel" id="filter-carousel">
+                <button class="filter-btn active" data-filter="all">All</button>
+                {% for type in chart_data.labels %}
+                <button class="filter-btn" data-filter="{{ type }}">{{ type|capitalize }}</button>
+                {% endfor %}
+            </div>
+            <div class="table-wrapper">
+                <table class="metadata-table">
+                    <thead>
+                        <tr>
+                            <th>Filename</th>
+                            <th>Type</th>
+                            <th>Size (KB)</th>
+                            <th>Modified Time</th>
+                            <th>Created Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for file in files %}
+                        <tr data-file-type="{{ file.file_type }}" onclick="window.location.href='{{ url_for('file_result', file_id=file.id) }}';">
+                            <td>{{ file.filename }}</td>
+                            <td>{{ file.file_type }}</td>
+                            <td>{{ file.size_kb }}</td>
+                            <td>{{ file.modified_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                            <td>{{ file.created_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    <script>
+        const chartData = {{ chart_data | tojson | safe }};
+    </script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -47,7 +47,7 @@ To get a local copy up and running, follow these simple steps.
 
 1.  Clone the repo
     ```sh
-    git clone [https://github.com/your-username/metadata-timeline-generator.git](https://github.com/your-username/metadata-timeline-generator.git)
+    git clone [https://github.com/BonyKoshy/metadata-timeline-generator.git](https://github.com/BonyKoshy/metadata-timeline-generator.git)
     ```
 2.  Navigate to the project directory
     ```sh

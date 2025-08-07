@@ -1,10 +1,6 @@
 # ✨ Metadata Timeline Generator ✨
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/your-username/metadata-timeline-generator/main/static/images//hero-image.png" alt="Hero Image" width="600"/>
-</p>
-
-<p align="center">
   <strong>Uncover the story hidden in your files. A powerful, one-click tool for digital forensic analysis.</strong>
 </p>
 

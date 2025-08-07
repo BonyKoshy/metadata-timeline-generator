@@ -11,11 +11,11 @@ echo.
 echo ===================================
 echo  Building Windows Application...
 echo ===================================
-pyinstaller --noconsole --name "MetadataGenerator" --add-data "templates;templates" --add-data "static;static" app.py
+pyinstaller --windowed --name "MetadataGenerator" --add-data "templates;templates" --add-data "static;static" --icon="static/images/favicon.ico" app.py
 
 echo.
 echo ===================================
 echo  Build complete!
-echo  Find your application in the 'dist' folder.
+echo  Your new application is in the 'dist' folder.
 echo ===================================
 pause

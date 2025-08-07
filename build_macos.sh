@@ -10,8 +10,8 @@ echo ""
 echo "==================================="
 echo " Building macOS Application..."
 echo "==================================="
-# Note the ':' separator for --add-data on macOS/Linux
-pyinstaller --noconsole --name "MetadataGenerator" --add-data "templates:templates" --add-data "static:static" app.py
+# Using --windowed and adding the --icon flag
+pyinstaller --windowed --name "MetadataGenerator" --add-data "templates:templates" --add-data "static:static" --icon="static/images/favicon.png" app.py
 
 echo ""
 echo "==================================="

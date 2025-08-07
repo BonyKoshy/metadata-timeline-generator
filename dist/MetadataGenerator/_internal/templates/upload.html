@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload - Metadata Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}">
+</head>
+<body>
+    <div class="container upload-container">
+        <header class="main-header">
+            <h1>Select Your Source</h1>
+        </header>
+
+        <input type="file" id="file-input" style="display: none;" accept="*/*">
+        <input type="file" id="folder-input" style="display: none;" webkitdirectory directory multiple>
+
+        <div class="card-deck">
+            <div class="card" id="file-card">
+                <h2>Choose a Single File</h2>
+                <img src="{{ url_for('static', filename='images/file-icon.png') }}" alt="File Icon">
+                <button class="btn btn-secondary">Select File</button>
+            </div>
+            <div class="card" id="folder-card">
+                <h2>Choose a Folder</h2>
+                <img src="{{ url_for('static', filename='images/folder-icon.png') }}" alt="Folder Icon">
+                <button class="btn btn-secondary">Select Folder</button>
+            </div>
+        </div>
+        
+        <div class="generate-section">
+            <button id="generate-btn" class="btn btn-primary" disabled>Generate Timeline</button>
+            <div class="progress-container" id="progress-container" style="display: none;">
+                <progress id="progress-bar"></progress>
+                <p id="progress-status">Preparing files...</p>
+            </div>
+        </div>
+
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

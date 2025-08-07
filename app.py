@@ -8,32 +8,25 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 from PIL import Image
 from PIL.ExifTags import TAGS
 import click
+import webview # <-- Import pywebview
 
 # --- App and Database Configuration ---
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 DB_FILE = 'metadata.db'
 
-# ----------------------------------------------------------------------------
-# **FIX 1: DATETIME HANDLING FOR SQLITE**
-# These functions teach sqlite3 how to handle Python datetime objects.
-# ----------------------------------------------------------------------------
+# --- Datetime Handling (No changes here) ---
 def adapt_datetime(dt):
-    """Adapter to store Python datetime objects as ISO 8601 strings."""
     return dt.isoformat()
 
 def convert_datetime(iso_str):
-    """Converter to parse ISO 8601 strings back into Python datetime objects."""
     return datetime.fromisoformat(iso_str.decode('utf-8'))
 
-# Register the adapter and converter with the sqlite3 library.
 sqlite3.register_adapter(datetime, adapt_datetime)
 sqlite3.register_converter("DATETIME", convert_datetime)
-# ----------------------------------------------------------------------------
 
-# --- Database Helper Functions ---
+# --- Database Helper Functions (No changes here) ---
 def get_db_connection():
-    # The 'detect_types' flag is crucial for the converter to work.
     conn = sqlite3.connect(DB_FILE, detect_types=sqlite3.PARSE_DECLTYPES)
     conn.row_factory = sqlite3.Row
     return conn
@@ -58,11 +51,10 @@ def init_db():
 
 @app.cli.command('init-db')
 def init_db_command():
-    """Clears the existing data and creates new tables."""
     init_db()
     click.echo('Initialized the database.')
 
-# --- Metadata Extraction (No changes needed here) ---
+# --- Metadata Extraction (No changes here) ---
 def extract_metadata(file_storage):
     filename = file_storage.filename
     file_type = filename.split('.')[-1].lower() if '.' in filename else 'unknown'
@@ -103,10 +95,11 @@ def extract_metadata(file_storage):
         'exif_data': exif_data_str
     }
 
-# --- Flask Routes ---
+# --- Flask Routes (No changes here) ---
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # We now point to 'upload.html' as the starting page for the app
+    return render_template('upload.html')
 
 @app.route('/upload')
 def upload_page():
@@ -166,12 +159,9 @@ def folder_result(run_id):
         'data': list(file_type_counts.values())
     }
     
-    # **FIX 2: PRE-PROCESS DATA FOR THE TEMPLATE**
-    # Create a list of summary items instead of using zip in the template.
     summary_list = list(zip(chart_data['labels'], chart_data['data']))
     
     conn.close()
-    # Pass the new summary_list to the template.
     return render_template('results_folder.html', files=files, total_files=total_files, chart_data=chart_data, summary_list=summary_list, run_id=run_id)
 
 @app.route('/results/file/<int:file_id>')
@@ -192,5 +182,21 @@ def file_result(file_id):
 
     return render_template('results_file.html', file=file, exif_data_parsed=exif_data_parsed)
 
+# --- Main Execution: MODIFIED FOR PYWEBVIEW ---
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Initialize the database if it doesn't exist
+    if not os.path.exists(DB_FILE):
+        init_db()
+
+    # Create the pywebview window. This will host the Flask app.
+    # The 'app' object is passed directly to pywebview, which will handle the server.
+    webview.create_window(
+        'Metadata Timeline Generator', # Window title
+        app,                         # The Flask app object
+        width=1280,
+        height=800,
+        resizable=True,
+        min_size=(800, 600)
+    )
+    # Start the event loop
+    webview.start(debug=True) # Set debug=False for production

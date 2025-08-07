@@ -23,3 +23,8 @@ pip-selfcheck.json
 
 # Windows
 Thumbs.db
+
+# Build artifacts
+dist/
+build/
+*.spec

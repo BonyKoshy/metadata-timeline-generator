@@ -99,7 +99,7 @@ def extract_metadata(file_storage):
 @app.route('/')
 def index():
     # We now point to 'upload.html' as the starting page for the app
-    return render_template('upload.html')
+    return render_template('index.html')
 
 @app.route('/upload')
 def upload_page():

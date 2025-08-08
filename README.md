@@ -47,7 +47,7 @@ To get a local copy up and running, follow these simple steps.
 
 1.  Clone the repo
     ```sh
-    git clone [https://github.com/BonyKoshy/metadata-timeline-generator.git](https://github.com/BonyKoshy/metadata-timeline-generator.git)
+    git clone https://github.com/BonyKoshy/metadata-timeline-generator.git
     ```
 2.  Navigate to the project directory
     ```sh
@@ -66,6 +66,6 @@ To get a local copy up and running, follow these simple steps.
 
 ## Release 
 
-You can download the ready-to-use desktop application from our **[Releases Page](https://github.com/your-username/metadata-timeline-generator/releases)**.
+You can download the ready-to-use desktop application from our **[Releases Page](https://github.com/BonyKoshy/metadata-timeline-generator/releases/tag/v1.0)**.
 
 <p align="right">(<a href="#top">back to top</a>)</p>

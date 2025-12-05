@@ -40,8 +40,11 @@ To get a local copy up and running, follow these simple steps.
 
 ### Prerequisites
 
-* Python 3.x
+* Python 3.x (Fully compatible with Python 3.14+)
 * pip
+
+> [!NOTE]
+> This application uses **Browser App Mode** (Chrome/Edge) to provide a native-like experience without complex dependencies, ensuring full compatibility with the latest Python versions (including 3.14).
 
 ### Installation
 

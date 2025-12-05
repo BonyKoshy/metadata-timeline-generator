@@ -8,7 +8,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 from PIL import Image
 from PIL.ExifTags import TAGS
 import click
-import webview # <-- Import pywebview
+# import webview # Removed for compatibility
 
 # --- App and Database Configuration ---
 app = Flask(__name__)
@@ -183,20 +183,56 @@ def file_result(file_id):
     return render_template('results_file.html', file=file, exif_data_parsed=exif_data_parsed)
 
 # --- Main Execution: MODIFIED FOR PYWEBVIEW ---
+import webbrowser
+import threading
+import sys
+import subprocess
+import time
+
+# --- Main Execution: MODIFIED FOR BROWSER (NO PYWEBVIEW) ---
+def open_browser(port):
+    """
+    Attempts to open the app in a dedicated Chrome/Edge window (App Mode).
+    Fallbacks to a standard browser tab if App Mode fails or browser not found.
+    """
+    time.sleep(1.5) # Give Flask a moment to start
+    url = f"http://127.0.0.1:{port}"
+    
+    # Common paths for Chrome and Edge on Windows
+    browser_paths = [
+        r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+        r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+        r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+        r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+    ]
+    
+    browser_opened = False
+    
+    # Try to launch in App Mode
+    for path in browser_paths:
+        if os.path.exists(path):
+            try:
+                subprocess.Popen([path, f"--app={url}"])
+                browser_opened = True
+                break
+            except Exception:
+                continue
+
+    # Fallback to default browser (new tab)
+    if not browser_opened:
+        print("Could not find Chrome/Edge for App Mode. Opening default browser...")
+        webbrowser.open(url)
+
 if __name__ == '__main__':
     # Initialize the database if it doesn't exist
     if not os.path.exists(DB_FILE):
         init_db()
 
-    # Create the pywebview window. This will host the Flask app.
-    # The 'app' object is passed directly to pywebview, which will handle the server.
-    webview.create_window(
-        'Metadata Timeline Generator', # Window title
-        app,                         # The Flask app object
-        width=1280,
-        height=800,
-        resizable=True,
-        min_size=(800, 600)
-    )
-    # Start the event loop
-    webview.start(debug=True) # Set debug=False for production
+    port = 5000
+    
+    # Schedule the browser to open
+    threading.Thread(target=open_browser, args=(port,), daemon=True).start()
+
+    print(f"Starting application on http://127.0.0.1:{port}")
+    # Start the Flask server
+    app.run(debug=False, port=port, use_reloader=False)

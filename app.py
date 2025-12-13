@@ -183,6 +183,9 @@ def file_result(file_id):
     return render_template('results_file.html', file=file, exif_data_parsed=exif_data_parsed)
 
 # --- Main Execution: MODIFIED FOR PYWEBVIEW ---
+
+
+# --- Main Execution: MODIFIED FOR PYWEBVIEW ---
 if __name__ == '__main__':
     # Initialize the database if it doesn't exist
     if not os.path.exists(DB_FILE):

@@ -3,3 +3,5 @@ Pillow
 Click
 pywebview
 PyInstaller
+PySide6
+qtpy
